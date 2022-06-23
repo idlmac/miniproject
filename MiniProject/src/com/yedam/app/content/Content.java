@@ -1,9 +1,9 @@
 package com.yedam.app.content;
 
-public class NoticeContent {
+public class Content {
 	private int contentId;
 	private String content;
-	private int aBoardId;
+	private int boardId;
 
 	public int getContentId() {
 		return contentId;
@@ -21,16 +21,17 @@ public class NoticeContent {
 		this.content = content;
 	}
 
-	public int getaBoardId() {
-		return aBoardId;
+	public int getBoardId() {
+		return boardId;
 	}
 
-	public void setaBoardId(int aBoardId) {
-		this.aBoardId = aBoardId;
+	public void setBoardId(int boardId) {
+		this.boardId = boardId;
 	}
 
 	@Override
 	public String toString() {
-		return "글내용 번호 : " + contentId + ", 내용 : " + content + ", 게시글 id : " + aBoardId;
+		return "글 번호 : " + contentId + ", 내용 : " + content + ", 게시판 번호 : " + boardId;
 	}
+
 }
