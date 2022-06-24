@@ -1,23 +1,21 @@
 package com.yedam.app.content;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.yedam.app.board.Board;
 import com.yedam.app.common.DAO;
 
-public class acDAO extends DAO {
-	private static acDAO acDAO = null;
+public class fcDAO extends DAO {
 
-	private acDAO() {
+	private static fcDAO fcDAO = null;
+
+	private fcDAO() {
 	}
 
-	public static acDAO getInstance() {
-		if (acDAO == null) {
-			acDAO = new acDAO();
+	public static fcDAO getInstance() {
+		if (fcDAO == null) {
+			fcDAO = new fcDAO();
 		}
-		return acDAO;
+		return fcDAO;
 	}
 
 	// 생성
@@ -25,7 +23,7 @@ public class acDAO extends DAO {
 		try {
 			connect();
 
-			String sql = "INSERT INTO anony_content VALUES(acont_id_seq.nextval,?,?)";
+			String sql = "INSERT INTO free_content VALUES(acont_id_seq.nextval,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, content.getContent());
 			pstmt.setInt(2, content.getBoardId());
@@ -47,7 +45,7 @@ public class acDAO extends DAO {
 	public void update(Content content) {
 		try {
 			connect();
-			String sql = "UPDATE anony_content SET content = ? WHERE board_id=?";
+			String sql = "UPDATE free_content SET content = ? WHERE board_id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, content.getContent());
 			pstmt.setInt(2, content.getBoardId());
@@ -71,7 +69,7 @@ public class acDAO extends DAO {
 		try {
 			connect();
 
-			String sql = "DELETE FROM anony_content WHERE board_id=" + boardId;
+			String sql = "DELETE FROM free_content WHERE board_id=" + boardId;
 			stmt = conn.createStatement();
 
 			int result = stmt.executeUpdate(sql);
@@ -94,7 +92,7 @@ public class acDAO extends DAO {
 		try {
 			connect();
 
-			String sql = "SELECT * FROM anony_content WHERE board_id =?";
+			String sql = "SELECT * FROM free_content WHERE board_id =?";
 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardId);

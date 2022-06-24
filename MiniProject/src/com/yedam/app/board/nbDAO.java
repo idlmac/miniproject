@@ -7,29 +7,26 @@ import java.util.List;
 import com.yedam.app.common.DAO;
 import com.yedam.app.content.Content;
 
-public class abDAO extends DAO {
+public class nbDAO extends DAO {
+	private static nbDAO nbDAO = null;
 
-	private static abDAO abDAO = null;
-
-	private abDAO() {
+	private nbDAO() {
 	}
 
-	public static abDAO getInstance() {
-		if (abDAO == null) {
-			abDAO = new abDAO();
+	public static nbDAO getInstance() {
+		if (nbDAO == null) {
+			nbDAO = new nbDAO();
 		}
-		return abDAO;
+		return nbDAO;
 	}
 
-	// 글 출력
-
-	public List<Board> anonyPrint() {
+	public List<Board> noticePrint() {
 
 		List<Board> list = new ArrayList<>();
 		try {
 			connect();
 
-			String sql = "SELECT * FROM anony_board ORDER BY board_id";
+			String sql = "SELECT * FROM notice_board ORDER BY board_id";
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 
@@ -38,7 +35,7 @@ public class abDAO extends DAO {
 				board.setBoardId(rs.getInt("board_id"));
 				board.setBoardTitle(rs.getString("board_title"));
 				board.setMemberId(rs.getString("member_id"));
-				board.setBoardDate(rs.getString("aboard_date"));
+				board.setBoardDate(rs.getString("board_date"));
 
 				list.add(board);
 			}
@@ -55,13 +52,14 @@ public class abDAO extends DAO {
 		try {
 			connect();
 
-			String sql = "INSERT INTO anony_board (board_id, member_id, board_title) VALUES(aboard_id_seq.nextval,?,?)";
+			String sql = "INSERT INTO notice_board (board_id, member_id, board_title) VALUES(nboard_id_seq.nextval,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, board.getMemberId());
 			pstmt.setString(2, board.getBoardTitle());
 
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
+				System.out.println("글이 등록되었습니다.");
 			} else {
 				System.out.println("정상등록되지 않았습니다.");
 			}
@@ -78,7 +76,7 @@ public class abDAO extends DAO {
 		Content content = new Content();
 		try {
 			connect();
-			String sql = "UPDATE anony_board SET board_title = ?, content = ? WHERE board_id=?";
+			String sql = "UPDATE notice_board SET board_title = ?, content = ? WHERE board_id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, board.getBoardTitle());
 			pstmt.setString(2, content.getContent());
@@ -103,7 +101,7 @@ public class abDAO extends DAO {
 		try {
 			connect();
 
-			String sql = "DELETE FROM anony_board WHERE board_id=" + boardId;
+			String sql = "DELETE FROM notice_board WHERE board_id=" + boardId;
 			stmt = conn.createStatement();
 
 			int result = stmt.executeUpdate(sql);
@@ -126,7 +124,7 @@ public class abDAO extends DAO {
 		try {
 			connect();
 
-			String sql = "SELECT * FROM anony_board WHERE board_id =?";
+			String sql = "SELECT * FROM notice_board WHERE board_id =?";
 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardId);
@@ -138,7 +136,7 @@ public class abDAO extends DAO {
 				board.setBoardId(rs.getInt("board_id"));
 				board.setBoardTitle(rs.getString("board_title"));
 				board.setMemberId(rs.getString("member_id"));
-				board.setBoardDate(rs.getString("aboard_date"));
+				board.setBoardDate(rs.getString("board_date"));
 
 			}
 		} catch (SQLException e) {
@@ -154,7 +152,7 @@ public class abDAO extends DAO {
 		try {
 			connect();
 
-			String sql = "SELECT MAX(board_id) FROM anony_board";
+			String sql = "SELECT MAX(board_id) FROM notice_board";
 
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);

@@ -31,7 +31,7 @@ public class Content {
 
 	@Override
 	public String toString() {
-		return "글 번호 : " + contentId + ", 내용 : " + content + ", 게시판 번호 : " + boardId;
+		return "| 내용 : " + content;
 	}
 
 }

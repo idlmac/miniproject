@@ -1,16 +1,25 @@
 package com.yedam.app.common;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.yedam.app.board.Board;
+import com.yedam.app.board.abDAO;
+import com.yedam.app.content.ContentManagement;
+import com.yedam.app.content.acDAO;
+import com.yedam.app.content.fcDAO;
+import com.yedam.app.content.ncDAO;
 import com.yedam.app.members.Member;
 import com.yedam.app.members.MembersDAO;
 
 public class LoginControl {
-	private static Member loginInfo = null;
 	Scanner sc = new Scanner(System.in);
 	MembersDAO mDAO = MembersDAO.getInstance();
-	static boolean loginflag = false;
+	protected acDAO aDAO = acDAO.getInstance();
+	protected fcDAO fDAO = fcDAO.getInstance();
+	protected ncDAO nDAO = ncDAO.getInstance();
+	private static Member loginInfo = null;
 
 	public static Member getLoginInfo() {
 		return loginInfo;
@@ -27,6 +36,10 @@ public class LoginControl {
 			} else if (menuNo == 2) {
 				// 로그인
 				login();
+
+			} else if (menuNo == 3) {
+				// 익명 게시판
+				anonyBoard();
 			} else if (menuNo == 0) {
 				// 종료
 				exit();
@@ -38,9 +51,9 @@ public class LoginControl {
 	}
 
 	private void menuPrint() {
-		System.out.println(" =============================");
-		System.out.println("| 1. 회원가입 | 2. 로그인 | 3. 종료 |");
-		System.out.println(" =============================");
+		System.out.println(" ==========================================");
+		System.out.println("| 1. 회원가입 | 2. 로그인 | 3. 익명게시판 | 0. 종료 |");
+		System.out.println(" ==========================================");
 		System.out.print("메뉴 선택>> ");
 	}
 
@@ -83,8 +96,18 @@ public class LoginControl {
 		if (loginInfo == null)
 			return;
 
-		// 성공할 경우 프로그램 실행
+		new MainManagement(loginInfo);
+	}
 
+	private void anonyBoard() {
+		abDAO aDAO = abDAO.getInstance();
+		List<Board> list = new ArrayList<>();
+		list = aDAO.anonyPrint();
+		for (Board show : list) {
+			System.out.println(show);
+
+		}
+		new ContentManagement(loginInfo, aDAO);
 	}
 
 	private Member inputMember() {

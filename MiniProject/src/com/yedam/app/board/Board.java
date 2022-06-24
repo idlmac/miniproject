@@ -6,7 +6,7 @@ public class Board {
 	private int boardId;
 	private String boardTitle;
 	private String memberId;
-	private Date boardDate;
+	private String boardDate;
 
 	public int getBoardId() {
 		return boardId;
@@ -32,16 +32,17 @@ public class Board {
 		this.memberId = memberId;
 	}
 
-	public Date getBoardDate() {
+	public String getBoardDate() {
 		return boardDate;
 	}
 
-	public void setBoardDate(Date boardDate) {
+	public void setBoardDate(String boardDate) {
 		this.boardDate = boardDate;
 	}
 
 	@Override
 	public String toString() {
-		return "글 번호 : " + boardId + ", 제목 : " + boardTitle + ", 작성자 : " + memberId + ", 작성일 : " + boardDate;
+
+		return "| 글 번호 : " + boardId + "\t| 제목 : " + boardTitle + " | 작성자 : " + memberId + " | 작성일 : " + boardDate;
 	}
 }
