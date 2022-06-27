@@ -1,10 +1,7 @@
 package com.yedam.app.content;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.yedam.app.board.Board;
 import com.yedam.app.common.DAO;
 
 public class acDAO extends DAO {

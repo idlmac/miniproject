@@ -1,5 +1,7 @@
 package com.yedam.app.content;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.yedam.app.board.Board;
@@ -8,7 +10,11 @@ import com.yedam.app.board.fbDAO;
 import com.yedam.app.board.nbDAO;
 import com.yedam.app.common.DAO;
 import com.yedam.app.members.Member;
+import com.yedam.app.reply.Reply;
 import com.yedam.app.reply.ReplyManagement;
+import com.yedam.app.reply.arDAO;
+import com.yedam.app.reply.frDAO;
+import com.yedam.app.reply.nrDAO;
 
 public class ContentManagement {
 	Scanner sc = new Scanner(System.in);
@@ -33,8 +39,8 @@ public class ContentManagement {
 				delete();
 			} else if (menuNo == 3) {
 				// 조회
-				selectOne();
-//				new ReplyManagement(loginInfo, dao);
+//				selectOne();
+				new ReplyManagement(loginInfo, dao, selectOne());
 			} else if (menuNo == 0) {
 				back();
 				break;
@@ -76,9 +82,9 @@ public class ContentManagement {
 			content.setBoardId(nDAO.selectOne());
 			ncDAO.getInstance().insert(content);
 		} else if (fDAO != null) {
-			nDAO.insert(board);
+			fDAO.insert(board);
 			content.setBoardId(fDAO.selectOne());
-			ncDAO.getInstance().insert(content);
+			fcDAO.getInstance().insert(content);
 		}
 	}
 
@@ -125,25 +131,36 @@ public class ContentManagement {
 		}
 	}
 
-	private void selectOne() {
+	private Board selectOne() {
 		Board board = null;
 		Content content = null;
 		int boardId = inputId();
+		List<Reply> list1 = new ArrayList<>();
 
 		if (aDAO != null) {
 			board = aDAO.selectOne(boardId);
 			content = acDAO.getInstance().selectOne(boardId);
-
+			List<Reply> list = arDAO.getInstance().selectAll(boardId);
+			list1 = list;
 		} else if (nDAO != null) {
 			board = nDAO.selectOne(boardId);
 			content = ncDAO.getInstance().selectOne(boardId);
+			List<Reply> list = nrDAO.getInstance().selectAll(boardId);
+			list1 = list;
 		} else if (fDAO != null) {
 			board = fDAO.selectOne(boardId);
 			content = fcDAO.getInstance().selectOne(boardId);
+			List<Reply> list = frDAO.getInstance().selectAll(boardId);
+			list1 = list;
 		}
 		System.out.println(board);
 		System.out.println(content);
+		System.out.println("\n------------------------------댓글------------------------------\n");
 
+		for (Reply show : list1) {
+			System.out.println(show);
+		}
+		return board;
 	}
 
 	private int inputId() {

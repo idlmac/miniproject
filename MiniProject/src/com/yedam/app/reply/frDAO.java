@@ -1,6 +1,8 @@
 package com.yedam.app.reply;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.yedam.app.common.DAO;
 
@@ -21,13 +23,11 @@ public class frDAO extends DAO {
 	public void insert(Reply reply) {
 		try {
 			connect();
-
-			String sql = "INSERT INTO free_reply (rp_id, member_id, content, board_id) VALUES (?,?,?,?) ";
+			String sql = "INSERT INTO free_reply (rp_id, member_id, content, board_id) VALUES (nrp_id_seq.nextval,?,?,?) ";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, reply.getRpId());
-			pstmt.setString(2, reply.getMemberId());
-			pstmt.setString(3, reply.getContent());
-			pstmt.setDate(4, reply.getRpDate());
+			pstmt.setString(1, reply.getMemberId());
+			pstmt.setString(2, reply.getContent());
+			pstmt.setInt(3, reply.getBoardId());
 
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
@@ -47,11 +47,11 @@ public class frDAO extends DAO {
 		try {
 			connect();
 
-			String sql = "UPDATE free_reply SET content=? WHERE board_id =?";
+			String sql = "UPDATE free_reply SET content=? WHERE rp_id =?";
 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, reply.getContent());
-			pstmt.setInt(2, reply.getBoardId());
+			pstmt.setInt(2, reply.getRpId());
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
 				System.out.println("정상적으로 수정되었습니다.");
@@ -66,11 +66,11 @@ public class frDAO extends DAO {
 	}
 
 	// 댓글 삭제
-	public void delete(int boardId) {
+	public void delete(int rpId) {
 		try {
 			connect();
 
-			String sql = "DELETE FROM free_reply WHERE board_id" + boardId;
+			String sql = "DELETE FROM free_reply WHERE rp_Id =" + rpId;
 
 			stmt = conn.createStatement();
 			int result = stmt.executeUpdate(sql);
@@ -87,4 +87,61 @@ public class frDAO extends DAO {
 		}
 	}
 
+	public Reply selectOne(int rpId) {
+		Reply rp = null;
+		try {
+			connect();
+
+			String sql = "SELECT * FROM free_reply WHERE rp_id = ?";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, rpId);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				rp = new Reply();
+				rp.setRpId(rs.getInt("rp_id"));
+				rp.setMemberId(rs.getString("member_id"));
+				rp.setContent(rs.getString("content"));
+				rp.setRpDate(rs.getString("rp_date"));
+				rp.setBoardId(rs.getInt("board_id"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return rp;
+	}
+
+	public List<Reply> selectAll(int boardId) {
+		List<Reply> list = new ArrayList<>();
+		try {
+			connect();
+
+			String sql = "SELECT * FROM free_reply WHERE board_id = ? ORDER BY rp_id";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardId);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				Reply rp = new Reply();
+				rp.setRpId(rs.getInt("rp_id"));
+				rp.setMemberId(rs.getString("member_id"));
+				rp.setContent(rs.getString("content"));
+				rp.setRpDate(rs.getString("rp_date"));
+				rp.setBoardId(boardId);
+
+				list.add(rp);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			disconnect();
+		}
+		return list;
+	}
 }

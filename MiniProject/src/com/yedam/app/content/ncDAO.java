@@ -1,10 +1,7 @@
 package com.yedam.app.content;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.yedam.app.board.Board;
 import com.yedam.app.common.DAO;
 
 public class ncDAO extends DAO {
@@ -25,7 +22,7 @@ public class ncDAO extends DAO {
 		try {
 			connect();
 
-			String sql = "INSERT INTO notice_content VALUES(acont_id_seq.nextval,?,?)";
+			String sql = "INSERT INTO notice_content VALUES(ncont_id_seq.nextval,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, content.getContent());
 			pstmt.setInt(2, content.getBoardId());

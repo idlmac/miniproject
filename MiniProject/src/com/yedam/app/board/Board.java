@@ -1,13 +1,10 @@
 package com.yedam.app.board;
 
-import java.sql.Date;
-
 public class Board {
 	private int boardId;
 	private String boardTitle;
 	private String memberId;
 	private String boardDate;
-
 	public int getBoardId() {
 		return boardId;
 	}

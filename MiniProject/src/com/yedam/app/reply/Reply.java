@@ -1,12 +1,10 @@
 package com.yedam.app.reply;
 
-import java.sql.Date;
-
 public class Reply {
 	private int rpId;
 	private String memberId;
 	private String content;
-	private Date rpDate;
+	private String rpDate;
 	private int boardId;
 
 	public int getRpId() {
@@ -33,11 +31,11 @@ public class Reply {
 		this.content = content;
 	}
 
-	public Date getRpDate() {
+	public String getRpDate() {
 		return rpDate;
 	}
 
-	public void setRpDate(Date rpDate) {
+	public void setRpDate(String rpDate) {
 		this.rpDate = rpDate;
 	}
 
@@ -51,8 +49,7 @@ public class Reply {
 
 	@Override
 	public String toString() {
-		return "댓글번호 : " + rpId + ", 작성자 : " + memberId + ", 댓글내용 : " + content + ", 작성일자 : " + rpDate + ", 글번호 : "
-				+ boardId;
+		return "| 댓글번호 : " + rpId + " | 작성자 : " + memberId + " | \t작성일자 : " + rpDate + ", 글번호 : " + boardId
+				+ " \n댓글내용 : " + content;
 	}
-
 }

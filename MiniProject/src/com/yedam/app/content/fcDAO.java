@@ -23,7 +23,7 @@ public class fcDAO extends DAO {
 		try {
 			connect();
 
-			String sql = "INSERT INTO free_content VALUES(acont_id_seq.nextval,?,?)";
+			String sql = "INSERT INTO free_content VALUES(fcont_id_seq.nextval,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, content.getContent());
 			pstmt.setInt(2, content.getBoardId());
