@@ -71,22 +71,20 @@ public class nbDAO extends DAO {
 	}
 
 	// 수정
-	public void update() {
-		Board board = new Board();
-		Content content = new Content();
+	public void update(Board board) {
+//		Board board = new Board();
 		try {
 			connect();
-			String sql = "UPDATE notice_board SET board_title = ?, content = ? WHERE board_id=?";
+			String sql = "UPDATE notice_board SET board_title = ? WHERE board_id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, board.getBoardTitle());
-			pstmt.setString(2, content.getContent());
-			pstmt.setInt(3, board.getBoardId());
+			pstmt.setInt(2, board.getBoardId());
 
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
-				System.out.println("정상적으로 수정되었습니다.");
+				System.out.println("제목변경완료");
 			} else {
-				System.out.println("정상적으로 수정되지 않았습니다.");
+				System.out.println("제목변경실패");
 			}
 
 		} catch (SQLException e) {

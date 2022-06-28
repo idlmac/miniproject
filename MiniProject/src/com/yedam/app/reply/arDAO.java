@@ -93,7 +93,7 @@ public class arDAO extends DAO {
 		try {
 			connect();
 
-			String sql = "SELECT * FROM anony_reply WHERE board_id = ?";
+			String sql = "SELECT * FROM anony_reply WHERE rp_id = ?";
 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardId);

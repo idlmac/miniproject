@@ -36,11 +36,10 @@ public class LoginControl {
 			} else if (menuNo == 2) {
 				// 로그인
 				login();
-
 			} else if (menuNo == 3) {
 				// 익명 게시판
 				anonyBoard();
-			} else if (menuNo == 0) {
+			} else if (menuNo == 9) {
 				// 종료
 				exit();
 				break;
@@ -51,14 +50,25 @@ public class LoginControl {
 	}
 
 	private void menuPrint() {
-		System.out.println(" ==========================================");
-		System.out.println("| 1. 회원가입 | 2. 로그인 | 3. 익명게시판 | 0. 종료 |");
-		System.out.println(" ==========================================");
+		System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+		System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+		System.out.println("■■■■■■■■■엉스티즈에 오신걸 환영합니다람쥐■■■■■■■■■■■■");
+		System.out.println("■■■■■■■■■■■■■■■■■■(〃･ิ‿･ิ)ゞ■■■■■■■■■■■■■■■■■■■");
+		System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+		System.out.println("■■■■■■■□■■■■■■■■■■■■■■■■■■■■■■■■■■■■□■■■■■■■■■");
+		System.out.println("■■■■■■■■■□■■■■■■■■■■■■■■■■■■■■■■■■□■■■■■■■■■■■");
+		System.out.println("■■■■■■■■■■■□■■■■■■■■■■■■■■■■■■■■□■■■■■■■■■■■■■");
+		System.out.println("■■■■■■■■■■■■■□■■■■■■■■■■■■■■■■□■■■■■■■■■■■■■■■");
+		System.out.println("■■■■■■■■■■■■■■■□□□□□□□□□□□□□□■■■■■■■■■■■■■■■■■");
+		System.out.println("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+		System.out.println(" ============================================");
+		System.out.println("| 1. 회원가입 | 2. 로그인 | 3. 익명게시판 | 9. 종료 |");
+		System.out.println(" ============================================");
 		System.out.print("메뉴 선택>> ");
 	}
 
 	private int menuSelect() {
-		int menuNo = 0;
+		int menuNo = -1;
 		try {
 			menuNo = Integer.parseInt(sc.nextLine());
 		} catch (NumberFormatException e) {
@@ -91,7 +101,6 @@ public class LoginControl {
 		Member inputInfo = inputMember();
 		// 로그인 시도
 		loginInfo = MembersDAO.getInstance().selectOne(inputInfo);
-
 		// 실패할 경우 메뉴로 BACK
 		if (loginInfo == null)
 			return;
@@ -107,7 +116,10 @@ public class LoginControl {
 			System.out.println(show);
 
 		}
-		new ContentManagement(loginInfo, aDAO);
+		Member inputInfo = new Member();
+		inputInfo.setMemberId("anony");
+		inputInfo.setMemberPw("anony");
+		new ContentManagement(inputInfo, aDAO);
 	}
 
 	private Member inputMember() {

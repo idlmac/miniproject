@@ -6,6 +6,7 @@ public class Reply {
 	private String content;
 	private String rpDate;
 	private int boardId;
+	private int rpId2;
 
 	public int getRpId() {
 		return rpId;
@@ -45,6 +46,14 @@ public class Reply {
 
 	public void setBoardId(int boardId) {
 		this.boardId = boardId;
+	}
+
+	public int getRpId2() {
+		return rpId2;
+	}
+
+	public void setRpId2(int rpId2) {
+		this.rpId2 = rpId2;
 	}
 
 	@Override

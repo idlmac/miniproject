@@ -29,14 +29,12 @@ public class fbDAO extends DAO {
 			String sql = "SELECT * FROM free_board ORDER BY board_id";
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
-
 			while (rs.next()) {
 				Board board = new Board();
 				board.setBoardId(rs.getInt("board_id"));
 				board.setBoardTitle(rs.getString("board_title"));
 				board.setMemberId(rs.getString("member_id"));
 				board.setBoardDate(rs.getString("board_date"));
-
 				list.add(board);
 			}
 		} catch (SQLException e) {
@@ -71,22 +69,20 @@ public class fbDAO extends DAO {
 	}
 
 	// 수정
-	public void update() {
-		Board board = new Board();
-		Content content = new Content();
+	public void update(Board board) {
+//		Board board = new Board();
 		try {
 			connect();
-			String sql = "UPDATE free_board SET board_title = ?, content = ? WHERE board_id=?";
+			String sql = "UPDATE free_board SET board_title = ? WHERE board_id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, board.getBoardTitle());
-			pstmt.setString(2, content.getContent());
-			pstmt.setInt(3, board.getBoardId());
+			pstmt.setInt(2, board.getBoardId());
 
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
-				System.out.println("정상적으로 수정되었습니다.");
+				System.out.println("제목 변경완료");
 			} else {
-				System.out.println("정상적으로 수정되지 않았습니다.");
+				System.out.println("제목 변경실패");
 			}
 
 		} catch (SQLException e) {

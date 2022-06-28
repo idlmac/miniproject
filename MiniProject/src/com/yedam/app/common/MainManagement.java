@@ -31,7 +31,7 @@ public class MainManagement {
 			} else if (menuNo == 3) {
 				// 익명게시판
 				showAnony();
-			} else if (menuNo == 0) {
+			} else if (menuNo == 9) {
 				back();
 				break;
 			} else {
@@ -41,13 +41,14 @@ public class MainManagement {
 	}
 
 	public void menuPrint() {
-		System.out.println("  ===================================================");
-		System.out.println(" | 1. 공지사항게시판 | 2. 자유게시판 | 3. 익명게시판 | 0. 뒤로가기 |");
-		System.out.println("  ===================================================");
+		System.out.println("  ======================================================");
+		System.out.println(" | 1. 공지사항게시판 | 2. 자유게시판 | 3. 익명게시판 | 9. 로그아웃 |");
+		System.out.println("  ======================================================");
+		System.out.print("메뉴선택> ");
 	}
 
 	public int menuSelect() {
-		int menu = 0;
+		int menu = -1;
 		try {
 			menu = Integer.parseInt(sc.nextLine());
 		} catch (NumberFormatException e) {
@@ -73,7 +74,6 @@ public class MainManagement {
 		list = fDAO.freePrint();
 		for (Board show : list) {
 			System.out.println(show);
-
 		}
 		new ContentManagement(loginInfo, fDAO);
 	}
@@ -84,7 +84,6 @@ public class MainManagement {
 		list = aDAO.anonyPrint();
 		for (Board show : list) {
 			System.out.println(show);
-
 		}
 		new ContentManagement(loginInfo, aDAO);
 	}

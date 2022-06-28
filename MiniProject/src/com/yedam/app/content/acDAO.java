@@ -29,9 +29,9 @@ public class acDAO extends DAO {
 
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
-				System.out.println("글이 등록되었습니다.");
+				System.out.println("게시글이 등록되었습니다.");
 			} else {
-				System.out.println("정상등록되지 않았습니다.");
+				System.out.println("게시글이 등록되지 않았습니다.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -44,6 +44,8 @@ public class acDAO extends DAO {
 	public void update(Content content) {
 		try {
 			connect();
+			System.out.println(content.getBoardId());
+			System.out.println(content.getContent());
 			String sql = "UPDATE anony_content SET content = ? WHERE board_id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, content.getContent());
@@ -51,9 +53,7 @@ public class acDAO extends DAO {
 
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
-				System.out.println("정상적으로 수정되었습니다.");
 			} else {
-				System.out.println("정상적으로 수정되지 않았습니다.");
 			}
 
 		} catch (SQLException e) {
@@ -74,9 +74,7 @@ public class acDAO extends DAO {
 			int result = stmt.executeUpdate(sql);
 
 			if (result > 0) {
-				System.out.println("삭제 완료되었습니다.");
 			} else {
-				System.out.println("삭제 실패하였습니다.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

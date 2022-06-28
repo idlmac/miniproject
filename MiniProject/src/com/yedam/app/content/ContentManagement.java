@@ -39,9 +39,11 @@ public class ContentManagement {
 				delete();
 			} else if (menuNo == 3) {
 				// 조회
-//				selectOne();
-				new ReplyManagement(loginInfo, dao, selectOne());
-			} else if (menuNo == 0) {
+				selectOne();
+			} else if (menuNo == 4) {
+				// 제목 수정
+				updateTitle();
+			} else if (menuNo == 9) {
 				back();
 				break;
 			} else {
@@ -51,9 +53,9 @@ public class ContentManagement {
 	}
 
 	public void menuPrint() {
-		System.out.println(" ===========================================");
-		System.out.println("| 1. 글 등록 | 2. 글 삭제 | 3. 글 조회 | 0. 뒤로가기 |");
-		System.out.println(" ===========================================");
+		System.out.println(" =========================================================");
+		System.out.println("| 1. 글 등록 | 2. 글 삭제 | 3. 글 조회 | 4. 제목수정 | 9. 뒤로가기 |");
+		System.out.println(" =========================================================");
 		System.out.print("선택>>");
 	}
 
@@ -78,10 +80,16 @@ public class ContentManagement {
 			content.setBoardId(aDAO.selectOne());
 			acDAO.getInstance().insert(content);
 		} else if (nDAO != null) {
-			nDAO.insert(board);
-			content.setBoardId(nDAO.selectOne());
-			ncDAO.getInstance().insert(content);
+			board.setMemberId("super");
+			if (loginInfo.getRole() == 1) {
+				nDAO.insert(board);
+				content.setBoardId(nDAO.selectOne());
+				ncDAO.getInstance().insert(content);
+			} else {
+				System.out.println("작성 권한이 없습니다.");
+			}
 		} else if (fDAO != null) {
+			board.setMemberId(loginInfo.getMemberId());
 			fDAO.insert(board);
 			content.setBoardId(fDAO.selectOne());
 			fcDAO.getInstance().insert(content);
@@ -93,10 +101,13 @@ public class ContentManagement {
 
 		System.out.print("제목>>");
 		board.setBoardTitle(sc.nextLine());
+		Member loginInfo = new Member();
+		loginInfo.setMemberId("anony");
 		board.setMemberId(loginInfo.getMemberId());
 		return board;
 	}
 
+	// 삭제
 	private void delete() {
 		// 글번호입력
 		Board board = null;
@@ -105,67 +116,88 @@ public class ContentManagement {
 		// 작성자 확인
 		if (aDAO != null) {
 			board = aDAO.selectOne(boardId);
-			if (board.getMemberId().equals(loginInfo.getMemberId())) {
-				acDAO.getInstance().delete(boardId);
-				aDAO.delete(boardId);
+			if (board == null) {
+				System.out.println("작성된 글이 없습니다.");
 			} else {
-				System.out.println("계정이 일치하지 않습니다.");
+				if (board.getMemberId().equals(loginInfo.getMemberId()) || loginInfo.getRole() == 1) {
+					acDAO.getInstance().delete(boardId);
+					aDAO.delete(boardId);
+				} else {
+					System.out.println("계정이 일치하지 않습니다.");
+				}
 			}
 		} else if (nDAO != null) {
 			board = nDAO.selectOne(boardId);
-			if (board.getMemberId().equals(loginInfo.getMemberId())) {
-				ncDAO.getInstance().delete(boardId);
-				nDAO.delete(boardId);
+			if (board == null) {
+				System.out.println("작성된 글이 없습니다.");
 			} else {
-				System.out.println("계정이 일치하지 않습니다.");
+				if (board.getMemberId().equals(loginInfo.getMemberId()) || loginInfo.getRole() == 1) {
+					ncDAO.getInstance().delete(boardId);
+					nDAO.delete(boardId);
+				} else {
+					System.out.println("삭제 권한이 없습니다.");
+				}
 			}
 
 		} else if (fDAO != null) {
 			board = fDAO.selectOne(boardId);
-			if (board.getMemberId().equals(loginInfo.getMemberId())) {
-				fcDAO.getInstance().delete(boardId);
-				fDAO.delete(boardId);
+			if (board == null) {
+				System.out.println("작성된 글이 없습니다.");
 			} else {
-				System.out.println("계정이 일치하지 않습니다.");
+				if (board.getMemberId().equals(loginInfo.getMemberId()) || loginInfo.getRole() == 1) {
+					fcDAO.getInstance().delete(boardId);
+					fDAO.delete(boardId);
+				} else {
+					System.out.println("계정이 일치하지 않습니다.");
+				}
 			}
 		}
 	}
 
-	private Board selectOne() {
-		Board board = null;
-		Content content = null;
+	private void selectOne() {
+		Board board = new Board();
+		Content content = new Content();
 		int boardId = inputId();
-		List<Reply> list1 = new ArrayList<>();
 
 		if (aDAO != null) {
 			board = aDAO.selectOne(boardId);
 			content = acDAO.getInstance().selectOne(boardId);
 			List<Reply> list = arDAO.getInstance().selectAll(boardId);
-			list1 = list;
+			printAll(nDAO, board, content, list);
 		} else if (nDAO != null) {
 			board = nDAO.selectOne(boardId);
 			content = ncDAO.getInstance().selectOne(boardId);
 			List<Reply> list = nrDAO.getInstance().selectAll(boardId);
-			list1 = list;
+			printAll(nDAO, board, content, list);
 		} else if (fDAO != null) {
 			board = fDAO.selectOne(boardId);
 			content = fcDAO.getInstance().selectOne(boardId);
 			List<Reply> list = frDAO.getInstance().selectAll(boardId);
-			list1 = list;
+			printAll(fDAO, board, content, list);
+		}
+	}
+
+	private void printAll(DAO dao, Board board, Content content, List<Reply> list) {
+		if (board == null) {
+			System.out.println("글이 존재하지 않습니다.");
+			return;
 		}
 		System.out.println(board);
 		System.out.println(content);
 		System.out.println("\n------------------------------댓글------------------------------\n");
-
-		for (Reply show : list1) {
-			System.out.println(show);
-		}
-		return board;
+		list.forEach(x -> System.out.println(x));
+		new ReplyManagement(loginInfo, dao, board);
 	}
 
 	private int inputId() {
-		System.out.print("글번호>");
-		return Integer.parseInt(sc.nextLine());
+		int num = -1;
+		try {
+			System.out.print("글번호>");
+			num = Integer.parseInt(sc.nextLine());
+		} catch (NumberFormatException e) {
+			System.out.println("다시 입력해주세요.");
+		}
+		return num;
 	}
 
 	private Content content() {
@@ -174,6 +206,53 @@ public class ContentManagement {
 		content.setContent(sc.nextLine());
 
 		return content;
+	}
+
+	private void updateTitle() {
+		Board board1 = new Board(); // 변경할 내용 담긴 게시판
+		Board board = new Board(); // 로그인 정보랑 비교할 게시판
+		int boardId = inputId();
+		board1.setBoardTitle(changeTitle());
+		board1.setBoardId(boardId);
+		if (aDAO != null) {
+			board = aDAO.selectOne(boardId);
+			if (board == null) {
+				System.out.println("작성된 글이 없습니다.");
+			} else {
+				if (board.getMemberId().equals(loginInfo.getMemberId()) || loginInfo.getRole() == 1) {
+					abDAO.getInstance().update(board1);
+				} else {
+					System.out.println("계정이 일치하지 않습니다.");
+				}
+			}
+		} else if (nDAO != null) {
+			board = nDAO.selectOne(boardId);
+			if (board == null) {
+				System.out.println("작성된 글이 없습니다.");
+			} else {
+				if (board.getMemberId().equals(loginInfo.getMemberId()) || loginInfo.getRole() == 1) {
+					nbDAO.getInstance().update(board1);
+				} else {
+					System.out.println("계정이 일치하지 않습니다.");
+				}
+			}
+		} else if (fDAO != null) {
+			board = fDAO.selectOne(boardId);
+			if (board == null) {
+				System.out.println("작성된 글이 없습니다.");
+			} else {
+				if (board.getMemberId().equals(loginInfo.getMemberId()) || loginInfo.getRole() == 1) {
+					fbDAO.getInstance().update(board1);
+				} else {
+					System.out.println("계정이 일치하지 않습니다.");
+				}
+			}
+		}
+	}
+
+	private String changeTitle() {
+		System.out.print("변경할 제목>");
+		return sc.nextLine();
 	}
 
 	public void back() {

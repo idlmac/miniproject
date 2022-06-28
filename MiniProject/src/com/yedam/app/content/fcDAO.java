@@ -30,9 +30,7 @@ public class fcDAO extends DAO {
 
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
-				System.out.println("글이 등록되었습니다.");
 			} else {
-				System.out.println("정상등록되지 않았습니다.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -52,9 +50,7 @@ public class fcDAO extends DAO {
 
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
-				System.out.println("정상적으로 수정되었습니다.");
 			} else {
-				System.out.println("정상적으로 수정되지 않았습니다.");
 			}
 
 		} catch (SQLException e) {
@@ -75,9 +71,7 @@ public class fcDAO extends DAO {
 			int result = stmt.executeUpdate(sql);
 
 			if (result > 0) {
-				System.out.println("삭제 완료되었습니다.");
 			} else {
-				System.out.println("삭제 실패하였습니다.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
